@@ -20,5 +20,11 @@
     ],
     "github": {
         "silent": true
-    }
+    },
+    "REWRITES": [
+        {
+            "SOURCE": "/(.*)",
+            "DESTINATION": "/"
+        }
+    ]
 }
