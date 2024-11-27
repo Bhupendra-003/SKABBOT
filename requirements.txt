@@ -1,0 +1,25 @@
+
+# Core Dependencies
+express
+express-session
+ejs
+dotenv
+
+# Database
+mysql2
+
+# AI/Language Models
+@langchain/groq
+@langchain/langgraph
+
+# File Processing
+csv-parser
+
+# Environment Variables
+dotenv
+
+# Path Management
+path
+
+# Session Management
+express-session
