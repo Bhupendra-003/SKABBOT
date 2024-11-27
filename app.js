@@ -98,8 +98,9 @@ app.post('/chat/process', async (req, res) => {
         const xpEarned = 10; // XP per message
         await updateXP(req.session.user.email, xpEarned);
         const currentXP = await getXP(req.session.user.email);
+        const streak = await getStreak(req.session.user.email);
         
-        const response = await getResponse(userInput, currentXP, );
+        const response = await getResponse(userInput, streak, currentXP, );
         res.status(200).json({
             response: response.response,
             xp: currentXP
