@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/stylesheets/chat.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+        integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
+<body>
+    <div class="brain-img"><img src="/images/brain.svg" alt=""></div>
+    <div class="main">
+        <div class="navbar">
+            <div class="nav-brand-cont">
+                <div class="nav-img-cont"><img src="/images/logo.png" alt=""></div>
+                <p class="nav-brand">SKABBOT</p>
+
+                <div class="dropdown-content">
+                    <a href="https://www.calm.com/breathe">Breathing Exercise</a>
+                    <a href="https://api.razzlepuzzles.com/2048">2048 game</a>
+                    <a href="https://playtictactoe.org/">Tic Tac Toe Game</a>
+                    <a href="https://www.rapidtables.com/tools/notepad.html">Notepad</a>
+                </div>
+
+            </div>
+            <div class="nav-addons">
+                <div class="streak addon">
+                    <img src="/images/streak.png" alt="">
+                    <p style="font-size: 1.3rem;"><%= streak %></p>
+                </div>
+                <div class="xp addon">
+                    <img src="/images/xp.png" alt="">
+                    <p><%= xp %>/500</p>
+                </div>
+            </div>
+            <div class="nav-user">
+                <p class="nav-user-name">
+                    Hi <%= name.split(' ')[0] %>
+                </p>
+                <i class="fa-regular fa-user"></i>
+            </div>
+        </div>
+        <div class="cont-container">
+            <div class="chat">
+                <div class="message-area">
+                    <!-- Conversation and loading area -->
+                    <!-- <div class="dots-loading msg-bot">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div> -->
+                </div>
+                <div class="message-bar">
+                    <form autocomplete="off" action="/chat/process" method="post">
+                        <input type="text" name="prompt" placeholder="Say Hi!">
+                        <button type="submit"><i class="fa-solid fa-paper-plane"></i></button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="/javascripts/chat.js"></script>
+</body>
+
+</html>
