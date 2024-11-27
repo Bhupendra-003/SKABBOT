@@ -7,6 +7,7 @@ const connection = mysql.createConnection({
     password: process.env.DB_PASSWORD,
     database: 'botuser',
     port: 3306,
+    timezone: 'Z'
 });
 
 // Connect to the database
@@ -32,37 +33,48 @@ const getXP = async (email) => {
     );
     return rows[0]?.xp || 0;
 };
-    
+
 const updateStreak = async (email) => {
-    const [user] = await connection.promise().query(
+    const [rows] = await connection.promise().query(
         'SELECT streak, last_game_played FROM users WHERE email = ?',
         [email]
     );
+    console.log(rows)
+    const user = rows[0];
 
-    const lastActivity = user[0]?.last_game_played;
-    const today = new Date().toISOString().split('T')[0];
-    
-    if (lastActivity === today) return user[0].streak;
+    const lastActivity = user?.last_game_played
+        ? new Date(user.last_game_played).toISOString().split('T')[0] // Convert to UTC date
+        : null;
+    const today = new Date().toISOString().split('T')[0]; // Get today's date in UTC
+
+    console.log('Last activity:', lastActivity);
+    console.log('Today:', today);
+
+    if (lastActivity === today) {
+        return user.streak; // User already played today
+    }
 
     let streak;
     if (!lastActivity) {
         streak = 1;
     } else {
         const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];
-        const lastActivityDate = new Date(lastActivity).toISOString().split('T')[0];
-        
-        if (lastActivityDate === yesterday) {
-            streak = user[0].streak + 1;
+        console.log('Yesterday:', yesterday);
+        console.log('Last activity:', lastActivity);
+        if (lastActivity === yesterday) {
+            streak = user.streak + 1;
         } else {
             streak = 1;
         }
     }
+
     await connection.promise().query(
         'UPDATE users SET streak = ?, last_game_played = ? WHERE email = ?',
         [streak, today, email]
     );
 
     return streak;
+
 };
 const getStreak = async (email) => {
     const [rows] = await connection.promise().query(
