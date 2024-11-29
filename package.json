@@ -7,10 +7,9 @@
   },
   "scripts": {
     "start": "node app.js",
-    "build": "echo 'No build step required for basic Node.js application'",
+    "build": "npm install",
     "dev": "nodemon app.js"
-  },
-  "keywords": [],
+  },  "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
