@@ -6,12 +6,6 @@
             "use": "@vercel/node"
         }
     ],
-    "routes": [
-        {
-            "src": "/(.*)",
-            "dest": "/"
-        }
-    ],
     "env": {
         "NODE_ENV": "production"
     },
@@ -21,10 +15,10 @@
     "github": {
         "silent": true
     },
-    "REWRITES": [
+    "rewrites": [
         {
-            "SOURCE": "/(.*)",
-            "DESTINATION": "/"
+            "source": "/(.*)",
+            "destination": "/api"
         }
     ]
 }
