@@ -5,8 +5,7 @@ const path = require('path');
 const app = express();
 const log = console .log;
 const {getResponse} = require('./intentClass.js');
-const { connection, updateXP, getXP, getStreak, updateStreak } = require('./models/connection');
-let user;
+const db = require('./models/connection.js');
 
 app.use(session({
     secret: 'your-secret-key',
@@ -30,45 +29,40 @@ app.get('/register', (req, res)=>{
 app.post('/create', async (req, res) => {
     console.log(req.body);
     const { name, email, password } = req.body;
-    user = name;
-    // Check if email already exists
-    const [rows] = await connection.promise().query('SELECT * FROM users WHERE email = ?', [email]);
-
-    if (rows.length > 0) {
+    if (db.findUserByEmail(email)) {
         return res.status(409).json({ message: 'Email already exists' });
     }
 
-    // Insert new user into the database
     try {
-        await connection.promise().query('INSERT INTO users (name, email, password) VALUES (?, ?, ?)', [name, email, password]);
+        db.addUser(name, email, password);
         res.status(201).json({ message: 'User created successfully' });
     } catch (err) {
         console.error('Error creating user:', err);
         res.status(500).json({ message: 'Internal server error' });
-    }
+    }    
 });
 
 app.get('/login', (req, res)=>{
     res.render('login');
 });
 app.post('/validate', async (req, res)=>{
-    console.log(req.body);
-    let {email, password} = req.body;
-    const [rows] = await connection.promise().query('SELECT * FROM users WHERE email = ? AND password = ?', [email, password]);
-    if(rows.length > 0){
-        req.session.user = rows[0];
+    const {email, password} = req.body;
+    const user = db.validateUser(email, password);
+    
+    if (user) {
+        req.session.user = user;
         res.status(200).json({message: 'Login successful'});
     } else {
         res.status(401).json({message: 'Invalid credentials'});
-    }   
+    }    
 });
 
 app.get('/chat', async (req, res)=>{
     if (!req.session.user) {
         return res.redirect('/login');
     }
-    const xp = await getXP(req.session.user.email);
-    const streak = await getStreak(req.session.user.email);
+    const xp = await db.getXP(req.session.user.email);
+    const streak = await db.getStreak(req.session.user.email);
     res.render('chat', {
         name: req.session.user.name,
         xp: xp,
@@ -82,7 +76,7 @@ app.post('/update-streak', async (req, res) => {
     }
     
     try {
-        const streak = await updateStreak(req.session.user.email);
+        const streak = await db.updateStreak(req.session.user.email);
         res.status(200).json({ streak });
     } catch (error) {
         res.status(500).json({message: "Error updating streak", error: error.message});
@@ -96,9 +90,9 @@ app.post('/chat/process', async (req, res) => {
     const userInput = req.body.prompt;
     try {
         const xpEarned = 10; // XP per message
-        await updateXP(req.session.user.email, xpEarned);
-        const currentXP = await getXP(req.session.user.email);
-        const streak = await getStreak(req.session.user.email);
+        await db.updateXP(req.session.user.email, xpEarned);
+        const currentXP = await db.getXP(req.session.user.email);
+        const streak = await db.getStreak(req.session.user.email);
         
         const response = await getResponse(userInput, streak, currentXP, );
         res.status(200).json({
