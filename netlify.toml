@@ -2,6 +2,7 @@
   command = "npm install && npm run build"
   publish = "public"
   functions = "functions"
+  included_files = ["views/**"]
 
 [[redirects]]
   from = "/*"
