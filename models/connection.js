@@ -1,79 +1,73 @@
-const fs = require('fs');
+const mongoose = require('mongoose');
 const Hash = require('password-hash');
+dotenv = require('dotenv');
+dotenv.config();
 
-// Initialize users.json if it doesn't exist
-if (!fs.existsSync('users.json')) {
-    fs.writeFileSync('users.json', JSON.stringify([], null, 4), 'utf-8');
-}
+// MongoDB User Schema
+const userSchema = new mongoose.Schema({
+    name: String,
+    email: { type: String, unique: true },
+    password: String,
+    xp: { type: Number, default: 0 },
+    streak: { type: Number, default: 0 },
+    lastPlayed: { type: String, default: "" },
+    lastLogin: { type: String, default: () => new Date().toISOString() }
+});
 
-function getUsers() {
+const User = mongoose.model('User', userSchema);
+
+// Connect to MongoDB Atlas
+(async () => {
     try {
-        return JSON.parse(fs.readFileSync('users.json', 'utf-8'));
+        await mongoose.connect(process.env.MONGODB_URI);
+        console.log('Connected to MongoDB Atlas');
     } catch (error) {
-        console.error('Error reading users file:', error);
-        return [];
+        console.error('Error connecting to MongoDB Atlas:', error);
     }
-}
+})();
 
-function saveUsers(users) {
-    fs.writeFileSync('users.json', JSON.stringify(users, null, 4), 'utf-8');
-}
-
-function addUser(name, email, password) {
-    const users = getUsers();
+async function addUser(name, email, password) {
     const hashedPassword = Hash.generate(password);
-    const newUser = {
+    const newUser = new User({
         name,
         email,
-        password: hashedPassword,
-        xp: 0,
-        streak: 0,
-        lastPlayed: "",
-        lastLogin: new Date().toISOString()
-    };
-    if(users.push(newUser)){
-        console.log('New User added!')
-    }
-    
-    saveUsers(users);
+        password: hashedPassword
+    });
+    await newUser.save();
     return newUser;
 }
 
-function findUserByEmail(email) {
-    const users = getUsers();
-    return users.find(user => user.email === email);
+async function findUserByEmail(email) {
+    return await User.findOne({ email });
 }
 
-function validateUser(email, password) {
-    const users = getUsers();
-    const user = users.find(user => user.email === email);
+async function validateUser(email, password) {
+    const user = await User.findOne({ email });
     return user && Hash.verify(password, user.password) ? user : null;
 }
 
 async function updateXP(email, xpToAdd) {
-    const users = getUsers();
-    const user = users.find(u => u.email === email);
+    const user = await User.findOne({ email });
     if (user) {
         user.xp = (user.xp || 0) + xpToAdd;
-        saveUsers(users);
+        await user.save();
         return user.xp;
     }
     return 0;
 }
 
 async function getXP(email) {
-    const user = findUserByEmail(email);
+    const user = await User.findOne({ email });
     return user ? user.xp : 0;
 }
 
 async function getStreak(email) {
-    const user = findUserByEmail(email);
+    const user = await User.findOne({ email });
     return user ? user.streak : 0;
 }
 
 async function updateStreak(email) {
-    const users = getUsers();
-    const user = users.find(u => u.email === email);
+    const user = await User.findOne({ email });
     if (user) {
         const today = new Date();
         const lastPlayed = new Date(user.lastPlayed);
@@ -81,22 +75,20 @@ async function updateStreak(email) {
         const daysDiff = Math.floor(timeDiff / (1000 * 3600 * 24));
 
         if (daysDiff === 1) {
-            // Last played yesterday, increment streak
             user.streak = (user.streak || 0) + 1;
             user.lastPlayed = today.toISOString();
         } else if (daysDiff === 0) {
-            // Played today, keep current streak
             return user.streak;
         } else {
-            // Not played for more than a day, reset streak
             user.streak = 1;
             user.lastPlayed = today.toISOString();
         }
-        saveUsers(users);
+        await user.save();
         return user.streak;
     }
     return 0;
 }
+
 const db = {
     addUser,
     findUserByEmail,
@@ -105,5 +97,5 @@ const db = {
     getXP,
     getStreak,
     updateStreak
-}
+};
 module.exports = db;
