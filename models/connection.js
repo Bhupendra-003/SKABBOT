@@ -37,8 +37,25 @@ async function addUser(name, email, password) {
     return newUser;
 }
 
+async function getUserDetails(email) {
+    const user = await User.findOne({ email });
+    const details = {
+        name: user?.name,
+        email: user?.email,
+        xp: user?.xp,
+        streak: user?.streak,
+        lastPlayed: user?.lastPlayed,
+        lastLogin: user?.lastLogin
+    };
+    return details;
+}
 async function findUserByEmail(email) {
-    return await User.findOne({ email });
+    const user = await User.findOne({ email });
+    // console.log('User details:', {
+    //     name: user?.name,
+    //     email: user?.email
+    // });
+    return user;
 }
 
 async function validateUser(email, password) {
@@ -90,6 +107,7 @@ async function updateStreak(email) {
 }
 
 const db = {
+    getUserDetails,
     addUser,
     findUserByEmail,
     validateUser,
@@ -98,4 +116,4 @@ const db = {
     getStreak,
     updateStreak
 };
-module.exports = db;
+module.exports = db

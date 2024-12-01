@@ -26,40 +26,42 @@ function loadDataset(filePath) {
 
 
 // Modified getResponse function to include conversation memory
-async function getResponse(prompt, streak, currentXP, filePath = "./customdata.csv") {
+async function getResponse(prompt, streak, currentXP, userDetails, filePath = "./customdata.csv") {
     // Load the dataset
     const dataset = await loadDataset(filePath);
 
     // Get memory-enhanced response
     const memoryResponse = await runConversation([
-        {
+        { 
             role: "system",
-            content: `You are a helpful assistant and companion named SKABBOT, which is designed to help with mental health topics. You can provide information, support, and guidance using cognitive behavioural technique (CBT) and  dont exceed words more than 30 until asked for a solution, and don't respond to questions out of healthcare. If the user has negative mood suggest some exercises and activities to help them feel better . If the question is related to harmful content, you should told them to seek immidiate guidance (indian) from a professional. The user currently has ${currentXP} XP and ${streak} Streak which can be increased by playing games everyday. Use emojis and make it more friendly and conversational, and you have a good sense of humor.`,
+            content: `You are SKABBOT, a compassionate AI companion specializing in mental health support. Your responses are concise (max 15 words unless asked for detailed solutions), friendly, and incorporate emojis 😊. You use evidence-based CBT techniques and maintain a warm, conversational tone. For negative moods, you suggest practical exercises and mood-lifting activities 🌟. If users mention harmful thoughts, respond with gentle humor and empathy 💝, while firmly encouraging professional help. You only address healthcare-related topics and aim to create a safe, supportive space. Remember to validate feelings while promoting positive coping strategies 🌈. Keep responses encouraging, authentic, and focused on well-being.`,
         },
+        { role: "user", content: `Additional context: User has ${userDetails.xp} XP, ${userDetails.streak} streak, last played on ${userDetails.lastPlayed.split('T')[0]}, and last logged in on ${userDetails.lastLogin.split('T')[0]}.` },
+        { role: "user", content: `User's current mood: ${prompt}` },
         { role: "user", content: prompt }
     ]);
 
-    // Perform dataset matching as before
-    const relevantMatches = dataset.filter((row) => {
-        return (
-            row.Question.toLowerCase().includes(prompt.toLowerCase()) ||
-            row.Answer.toLowerCase().includes(prompt.toLowerCase())
-        );
-    });
+    // // Perform dataset matching as before
+    // const relevantMatches = dataset.filter((row) => {
+    //     return (
+    //         row.Question.toLowerCase().includes(prompt.toLowerCase()) ||
+    //         row.Answer.toLowerCase().includes(prompt.toLowerCase())
+    //     );
+    // });
 
-    let datasetAnswer = "";
-    if (relevantMatches.length > 0) {
-        console.log("[Dataset Match Found]");
-        datasetAnswer = relevantMatches[0].Answer;
-    }
+    // let datasetAnswer = "";
+    // if (relevantMatches.length > 0) {
+    //     console.log("[Dataset Match Found]");
+    //     datasetAnswer = relevantMatches[0].Answer;
+    // }
 
-    // Combine all responses
-    const finalAnswer = datasetAnswer
-        ? `${datasetAnswer} Additionally, ${memoryResponse}`
-        : memoryResponse;
+    // // Combine all responses
+    // const finalAnswer = datasetAnswer
+    //     ? datasetAnswer
+    //     : memoryResponse;
 
     return {
-        response: finalAnswer,
+        response: memoryResponse,
     };
 }
 

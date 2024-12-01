@@ -104,8 +104,8 @@ app.post('/chat/process', async (req, res) => {
         await db.updateXP(req.session.user.email, xpEarned);
         const currentXP = await db.getXP(req.session.user.email);
         const streak = await db.getStreak(req.session.user.email);
-        
-        const response = await getResponse(userInput, streak, currentXP);
+        const userDetails = await db.getUserDetails(req.session.user.email);
+        const response = await getResponse(userInput, streak, currentXP, userDetails);
         res.status(200).json({
             response: response.response,
             xp: currentXP
