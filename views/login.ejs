@@ -1,55 +1,93 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Login - SKABBOT</title>
     <link rel="stylesheet" href="/stylesheets/login.css">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap');
-    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="main">
-        <div class="cont">
-            <div class="section1">
-                <div class="image-cont">
-                    <img src="/images/logo.png" alt="">
-                </div>
-                <h1>Login to Skabbot</h1>
-                <div class="google">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/1200px-Google_%22G%22_logo.svg.png" alt="">
-                    <p>Continue with Google</p>
-                </div>
+    <nav class="navbar">
+        <div class="nav-left">
+            <img src="/images/logo.png" alt="SKABBOT Logo" class="logo">
+            <h1 class="brand-name">SKABBOT</h1>
+        </div>
+        <div class="nav-right">
+            <div class="theme-selector">
+                <button class="theme-btn" data-theme="light">
+                    <i class="fas fa-sun"></i>
+                </button>
+                <button class="theme-btn" data-theme="dark">
+                    <i class="fas fa-moon"></i>
+                </button>
             </div>
-            <div class="or-sep">
-                <div class="or-left"></div>
-                <p>or</p>
-                <div class="or-right"></div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="login-card">
+            <div class="card-header">
+                <h2>Welcome Back</h2>
+                <p class="subtitle">Sign in to continue to SKABBOT</p>
             </div>
-            <div class="section2">
-                <form action="/validate" method="post">
-                    <div class="input-group">
-                        <label for="email" >Email</label>
-                        <input required type="email" name="email" placeholder="Email" required>
-                        <p id="error-message"></p>
+
+            <div class="social-login">
+                <button class="google-btn">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/1200px-Google_%22G%22_logo.svg.png" alt="Google">
+                    <span>Continue with Google</span>
+                </button>
+            </div>
+
+            <div class="divider">
+                <span>or continue with email</span>
+            </div>
+
+            <form action="/validate" method="post" class="login-form">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-envelope"></i>
+                        <input required type="email" id="email" name="email" placeholder="Enter your email">
                     </div>
-                    <div class="input-group">
-                        <label for="password">Password</label>
-                        <input autocomplete="off" required minlength="6" type="password" name="password" placeholder="Password" required>
+                    <p class="error-message" id="error-message"></p>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-lock"></i>
+                        <input required type="password" id="password" name="password" placeholder="Enter your password" minlength="6">
+                        <button type="button" class="toggle-password">
+                            <i class="fas fa-eye"></i>
+                        </button>
                     </div>
-                    <button class="login" type="submit">Login</button>
-                </form>
-            </div>
-            <div class="extras">
-                <a class="forgot" href="">Forgot your password?</a>
-                <div class="new-user">
-                    <p>New to Scabbot?</p>
-                    <a href="/register">Create account</a>
+                </div>
+
+                <div class="form-options">
+                    <div class="remember-me">
+                        <input type="checkbox" id="remember" name="remember">
+                        <label for="remember">Remember me</label>
+                    </div>
+                    <a href="#" class="forgot-password">Forgot password?</a>
+                </div>
+
+                <button type="submit" class="submit-btn">
+                    <span>Sign In</span>
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+            </form>
+
+            <div class="footer-links">
+                <div class="signup-link">
+                    <span>Don't have an account?</span>
+                    <a href="/register">Sign up</a>
                 </div>
             </div>
         </div>
     </div>
+
     <script src="/javascripts/login.js"></script>
 </body>
 </html>
