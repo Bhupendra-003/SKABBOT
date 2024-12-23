@@ -1,69 +1,97 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>SKABBOT - Your AI Assistant</title>
     <link rel="stylesheet" href="/stylesheets/chat.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
-        integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
-
 <body>
-    <div class="brain-img"><img src="/images/brain.svg" alt=""></div>
-    <div class="main">
-        <div class="navbar">
-            <div class="nav-brand-cont">
-                <div class="nav-img-cont"><img src="/images/logo.png" alt=""></div>
-                <p class="nav-brand">SKABBOT</p>
+    <div class="app-container">
+        <nav class="navbar">
+            <div class="nav-brand">
+                <div class="nav-logo">
+                    <img src="/images/logo.png" alt="SKABBOT Logo" class="logo-img">
+                    <span class="brand-name">SKABBOT</span>
+                </div>
+                
+                <div class="dropdown-menu">
+                    <button class="dropdown-trigger">
+                        <i class="fas fa-brain"></i>
+                        <span>Activities</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="dropdown-content">
+                        <a href="https://www.calm.com/breathe" class="dropdown-item">
+                            <i class="fas fa-wind"></i>
+                            <span>Breathing Exercise</span>
+                        </a>
+                        <a href="https://api.razzlepuzzles.com/2048" class="dropdown-item">
+                            <i class="fas fa-puzzle-piece"></i>
+                            <span>2048 Game</span>
+                        </a>
+                        <a href="https://playtictactoe.org/" class="dropdown-item">
+                            <i class="fas fa-gamepad"></i>
+                            <span>Tic Tac Toe</span>
+                        </a>
+                        <a href="https://www.rapidtables.com/tools/notepad.html" class="dropdown-item">
+                            <i class="fas fa-edit"></i>
+                            <span>Notepad</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
 
-                <div class="dropdown-content">
-                    <a href="https://www.calm.com/breathe">Breathing Exercise</a>
-                    <a href="https://api.razzlepuzzles.com/2048">2048 game</a>
-                    <a href="https://playtictactoe.org/">Tic Tac Toe Game</a>
-                    <a href="https://www.rapidtables.com/tools/notepad.html">Notepad</a>
+            <div class="nav-stats">
+                <div class="stat-item streak">
+                    <i class="fas fa-fire"></i>
+                    <span class="stat-value"><%= streak %></span>
+                    <span class="stat-label">Streak</span>
                 </div>
+                <div class="stat-item xp">
+                    <i class="fas fa-star"></i>
+                    <div class="xp-container">
+                        <div class="xp-progress">
+                            <div class="xp-bar" style="width: 50%"></div>
+                        </div>
+                        <span class="xp-text"><%= xp %>/1000 XP</span>
+                    </div>
+                </div>
+            </div>
 
+            <div class="nav-profile">
+                <span class="welcome-text">Welcome, <%= name.split(' ')[0] %></span>
+                <button class="profile-button">
+                    <i class="fa-regular fa-user"></i>
+                </button>
             </div>
-            <div class="nav-addons">
-                <div class="streak addon">
-                    <img src="/images/streak.png" alt="">
-                    <p style="font-size: 1.3rem;"><%= streak %></p>
-                </div>
-                <div class="xp addon">
-                    <img src="/images/xp.png" alt="">
-                    <p><%= xp %>/1000</p>
-                </div>
+        </nav>
+
+        <main class="chat-container">
+            <div class="message-area" id="messageArea">
+                <!-- Messages will be inserted here via JavaScript -->
             </div>
-            <div class="nav-user">
-                <p class="nav-user-name">
-                    Hi <%= name.split(' ')[0] %>
-                </p>
-                <i class="fa-regular fa-user"></i>
+
+            <div class="message-input">
+                <form autocomplete="off" action="/chat/process" method="post" class="input-form">
+                    <div class="input-wrapper">
+                        <input 
+                            type="text" 
+                            name="prompt" 
+                            placeholder="Type your message here..."
+                            class="message-field"
+                        >
+                        <button type="submit" class="send-button">
+                            <i class="fa-solid fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </form>
             </div>
-        </div>
-        <div class="cont-container">
-            <div class="chat">
-                <div class="message-area">
-                    <!-- Conversation and loading area -->
-                    <!-- <div class="dots-loading msg-bot">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </div> -->
-                </div>
-                <div class="message-bar">
-                    <form autocomplete="off" action="/chat/process" method="post">
-                        <input type="text" name="prompt" placeholder="Say Hi!">
-                        <button type="submit"><i class="fa-solid fa-paper-plane"></i></button>
-                    </form>
-                </div>
-            </div>
-        </div>
+        </main>
     </div>
+
     <script src="/javascripts/chat.js"></script>
 </body>
-
 </html>

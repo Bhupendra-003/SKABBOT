@@ -1,7 +1,8 @@
 const messageArea = document.querySelector('.message-area');
 const userInput = document.querySelector('form input');
 const sendButton = document.querySelector('form button');
-const xpDisplay = document.querySelector('.xp p');
+const xpDisplay = document.querySelector('.xp-text');
+const xpBar = document.querySelector('.xp-bar');
 
 sendButton.addEventListener('click', async (e) => {
     e.preventDefault();
@@ -11,7 +12,7 @@ sendButton.addEventListener('click', async (e) => {
     // Add user message
     addMessageToUI(prompt, 'user');
     userInput.value = '';
-``
+
     // Create and show loading animation
     const thinkDiv = displayThinkAnimation();
 
@@ -32,7 +33,9 @@ sendButton.addEventListener('click', async (e) => {
         addMessageToUI(data.response, 'bot');
 
         if (data.xp) {
-            xpDisplay.textContent = `${data.xp}/500`;
+            xpDisplay.textContent = `${data.xp}/1000 XP`;
+            const xpPercentage = (data.xp / 1000) * 100;
+            xpBar.style.width = `${xpPercentage}%`;
         }
     } catch (error) {
         thinkDiv.remove();
@@ -62,8 +65,8 @@ function addMessageToUI(message, sender) {
     messageArea.scrollTop = messageArea.scrollHeight;
 }
 
-const streakDisplay = document.querySelector('.streak p');
-const gameLinks = document.querySelectorAll('.dropdown-content a');
+const streakDisplay = document.querySelector('.stat-value');
+const gameLinks = document.querySelectorAll('.dropdown-item');
 
 gameLinks.forEach(link => {
     link.addEventListener('click', async (e) => {
