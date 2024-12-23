@@ -1,3 +1,27 @@
+// Theme Switching
+const themeButtons = document.querySelectorAll('.theme-btn');
+const html = document.documentElement;
+
+// Load saved theme from localStorage
+const savedTheme = localStorage.getItem('theme') || 'light';
+html.setAttribute('data-theme', savedTheme);
+updateActiveThemeButton(savedTheme);
+
+themeButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+        const theme = btn.getAttribute('data-theme');
+        html.setAttribute('data-theme', theme);
+        localStorage.setItem('theme', theme);
+        updateActiveThemeButton(theme);
+    });
+});
+
+function updateActiveThemeButton(theme) {
+    themeButtons.forEach(btn => {
+        btn.classList.toggle('active', btn.getAttribute('data-theme') === theme);
+    });
+}
+
 const messageArea = document.querySelector('.message-area');
 const userInput = document.querySelector('form input');
 const sendButton = document.querySelector('form button');
