@@ -27,19 +27,20 @@ const userInput = document.querySelector('form input');
 const sendButton = document.querySelector('form button');
 const xpDisplay = document.querySelector('.xp-text');
 const xpBar = document.querySelector('.xp-bar');
+const chatContainer = document.querySelector('.chat-container');
 
 sendButton.addEventListener('click', async (e) => {
     e.preventDefault();
     const prompt = userInput.value;
     if(!prompt) return;
-
     // Add user message
     addMessageToUI(prompt, 'user');
     userInput.value = '';
 
     // Create and show loading animation
     const thinkDiv = displayThinkAnimation();
-
+    messageArea.scrollTop = messageArea.scrollHeight;
+    chatContainer.scrollTop = chatContainer.scrollHeight;
     try {
         const response = await fetch('/chat/process', {
             method: 'POST',
@@ -80,7 +81,6 @@ function displayThinkAnimation() {
     messageArea.scrollTop = messageArea.scrollHeight;
     return thinkDiv;
 }
-
 function addMessageToUI(message, sender) {
     const messageDiv = document.createElement('div');
     messageDiv.classList.add(`msg-${sender}`);

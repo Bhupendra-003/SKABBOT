@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,6 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
+
 <body>
     <div class="app-container">
         <nav class="navbar">
@@ -16,7 +18,7 @@
                     <img src="/images/logo.png" alt="SKABBOT Logo" class="logo-img">
                     <span class="brand-name">SKABBOT</span>
                 </div>
-                
+
                 <div class="dropdown-menu">
                     <button class="dropdown-trigger">
                         <i class="fas fa-brain"></i>
@@ -68,7 +70,9 @@
             <div class="nav-stats">
                 <div class="stat-item streak">
                     <i class="fas fa-fire"></i>
-                    <span class="stat-value"><%= streak %></span>
+                    <span class="stat-value">
+                        <%= streak %>
+                    </span>
                     <span class="stat-label">Streak</span>
                 </div>
                 <div class="stat-item xp">
@@ -77,7 +81,9 @@
                         <div class="xp-progress">
                             <div class="xp-bar" style="width: 50%"></div>
                         </div>
-                        <span class="xp-text"><%= xp %>/1000 XP</span>
+                        <span class="xp-text">
+                            <%= xp %>/1000 XP
+                        </span>
                     </div>
                 </div>
             </div>
@@ -97,17 +103,15 @@
 
             <div class="message-input">
                 <form autocomplete="off" action="/chat/process" method="post" class="input-form">
-                    <div class="input-wrapper">
-                        <input 
-                            type="text" 
-                            name="prompt" 
-                            placeholder="Type your message here..."
-                            class="message-field"
-                        >
-                        <button type="submit" class="send-button">
-                            <i class="fa-solid fa-paper-plane"></i>
-                        </button>
-                    </div>
+                    <input 
+                        type="text" 
+                        name="prompt" 
+                        placeholder="Type your message here..."
+                        class="message-field"
+                    >
+                    <button type="submit" class="send-button">
+                        <i class="fa-solid fa-paper-plane"></i>
+                    </button>
                 </form>
             </div>
         </main>
