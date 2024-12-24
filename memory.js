@@ -11,7 +11,7 @@ const {
 // Initialize the ChatGroq LLM with API key from environment variables
 const llm = new ChatGroq({
     model: "llama3-70b-8192", // Replace with your model ID
-    temperature: 0.7,
+    temperature: 0.9,
     apiKey: process.env.CHATGROQ_API_KEY, // API Key from .env file
 });
 

@@ -53,6 +53,11 @@ app.post('/validate', async (req, res)=>{
         
         if (user) {
             req.session.user = user;
+            try{
+                await db.updateLastLogin(email);
+            } catch (err) {
+                console.error('Error updating last login:', err);
+            }
             res.status(200).json({message: 'Login successful'});
         } else {
             res.status(401).json({message: 'Invalid credentials'});

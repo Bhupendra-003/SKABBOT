@@ -72,6 +72,15 @@ async function updateXP(email, xpToAdd) {
     }
     return 0;
 }
+async function updateLastLogin(email) {
+    const user = await User.findOne({ email });
+    if (user) {
+        user.lastLogin = new Date().toISOString();
+        await user.save();
+        return user.lastLogin;
+    }
+    return null;
+}
 
 async function getXP(email) {
     const user = await User.findOne({ email });
@@ -114,6 +123,7 @@ const db = {
     updateXP,
     getXP,
     getStreak,
-    updateStreak
+    updateStreak,
+    updateLastLogin
 };
 module.exports = db
