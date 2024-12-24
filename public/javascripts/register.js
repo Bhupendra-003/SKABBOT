@@ -13,7 +13,9 @@ function updateActiveThemeButton(theme) {
 
 // Initialize theme
 const savedTheme = localStorage.getItem('theme') || 'light';
-setTheme(savedTheme);
+document.onload = () => {
+    setTheme(savedTheme);
+};
 
 // Theme button click handlers
 document.querySelectorAll('.theme-btn').forEach(btn => {
